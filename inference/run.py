@@ -11,9 +11,9 @@ import pickle
 import sys
 from datetime import datetime
 from typing import List
-
+import numpy as np
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
+import tensorflow as tf
 
 # Adds the root directory to system path
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -43,23 +43,23 @@ parser.add_argument("--out_path",
 
 
 def get_latest_model_path() -> str:
-    """Gets the path of the latest saved model"""
+    """Gets the path of the latest saved model (in native Keras format)"""
     latest = None
     for (dirpath, dirnames, filenames) in os.walk(MODEL_DIR):
         for filename in filenames:
-            if not latest or datetime.strptime(latest, conf['general']['datetime_format'] + '.pickle') < \
-                    datetime.strptime(filename, conf['general']['datetime_format'] + '.pickle'):
-                latest = filename
+            if filename.endswith(".keras"):  # Check for native Keras format
+                if not latest or datetime.strptime(latest, conf['general']['datetime_format'] + '.keras') < \
+                        datetime.strptime(filename, conf['general']['datetime_format'] + '.keras'):
+                    latest = filename
     return os.path.join(MODEL_DIR, latest)
 
 
-def get_model_by_path(path: str) -> DecisionTreeClassifier:
-    """Loads and returns the specified model"""
+def get_model_by_path(path: str) -> tf.keras.Model:
+    """Loads and returns the specified TensorFlow model"""
     try:
-        with open(path, 'rb') as f:
-            model = pickle.load(f)
-            logging.info(f'Path of the model: {path}')
-            return model
+        model = tf.keras.models.load_model(path)  # Load model directly
+        logging.info(f'Path of the model: {path}')
+        return model
     except Exception as e:
         logging.error(f'An error occurred while loading the model: {e}')
         sys.exit(1)
@@ -75,11 +75,12 @@ def get_inference_data(path: str) -> pd.DataFrame:
         sys.exit(1)
 
 
-def predict_results(model: DecisionTreeClassifier, infer_data: pd.DataFrame) -> pd.DataFrame:
-    """Predict de results and join it with the infer_data"""
-    results = model.predict(infer_data)
-    infer_data['results'] = results
+def predict_results(model: tf.keras.Model, infer_data: pd.DataFrame) -> pd.DataFrame:
+    """Predict results and join them with the infer_data."""
+    results = model.predict(infer_data[['sepal length (cm)','sepal width (cm)','petal length (cm)','petal width (cm)']])  # Use only features for prediction
+    infer_data['results'] = np.argmax(results, axis=1)  # Convert to class labels
     return infer_data
+
 
 
 def store_results(results: pd.DataFrame, path: str = None) -> None:

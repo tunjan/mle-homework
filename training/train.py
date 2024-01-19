@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score
 
 # Comment this lines if you have problems with MLFlow installation
 import mlflow
@@ -87,7 +87,7 @@ class Training():
 
     def data_split(self, df: pd.DataFrame, test_size: float = 0.33) -> tuple:
         logging.info("Splitting data into training and test sets...")
-        return train_test_split(self.df.iloc[:, :-1], self.df.iloc[:, -1], test_size=test_size, 
+        return train_test_split(df.iloc[:, :-1], df.iloc[:, -1], test_size=test_size, 
                                 random_state=conf['general']['random_state'])
     
     def train(self, X_train: pd.DataFrame, y_train: pd.DataFrame) -> None:
@@ -97,8 +97,8 @@ class Training():
     def test(self, X_test: pd.DataFrame, y_test: pd.DataFrame) -> float:
         logging.info("Testing the model...")
         y_pred = self.model.predict(X_test)
-        res = f1_score(y_test, y_pred)
-        logging.info(f"f1_score: {res}")
+        res = accuracy_score(y_test, y_pred)
+        logging.info(f"accuracy_score: {res}")
         return res
 
     def save(self, path: str) -> None:

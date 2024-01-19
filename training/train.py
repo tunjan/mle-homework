@@ -87,7 +87,7 @@ class Training():
 
     def data_split(self, df: pd.DataFrame, test_size: float = 0.33) -> tuple:
         logging.info("Splitting data into training and test sets...")
-        return train_test_split(df[['x1','x2']], df['y'], test_size=test_size, 
+        return train_test_split(self.df.iloc[:, :-1], self.df.iloc[:, -1], test_size=test_size, 
                                 random_state=conf['general']['random_state'])
     
     def train(self, X_train: pd.DataFrame, y_train: pd.DataFrame) -> None:

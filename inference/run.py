@@ -44,14 +44,16 @@ parser.add_argument("--out_path",
 
 def get_latest_model_path() -> str:
     """Gets the path of the latest saved model (in native Keras format)"""
-    latest = None
-    for (dirpath, dirnames, filenames) in os.walk(MODEL_DIR):
-        for filename in filenames:
-            if filename.endswith(".keras"):  # Check for native Keras format
-                if not latest or datetime.strptime(latest, conf['general']['datetime_format'] + '.keras') < \
-                        datetime.strptime(filename, conf['general']['datetime_format'] + '.keras'):
-                    latest = filename
-    return os.path.join(MODEL_DIR, latest)
+    latest_model_path = None
+    latest_mtime = None
+    for filename in os.listdir(MODEL_DIR):
+        if filename.endswith(".keras"):  # Check for native Keras format
+            model_path = os.path.join(MODEL_DIR, filename)
+            model_mtime = os.path.getmtime(model_path)
+            if not latest_mtime or model_mtime > latest_mtime:
+                latest_model_path = model_path
+                latest_mtime = model_mtime
+    return latest_model_path
 
 
 def get_model_by_path(path: str) -> tf.keras.Model:

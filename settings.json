@@ -14,6 +14,6 @@
     },
     "inference": {
         "inp_table_name": "iris_test.csv",
-        "model_name": "prod_model.pickle" 
+        "model_name": "prod_model.keras" 
     }
 }

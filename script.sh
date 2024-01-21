@@ -1,5 +1,7 @@
 #!/bin/bash
 
+python ./data_process/data_generation.py
+
 # Build training Docker image
 docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t training_image .
 

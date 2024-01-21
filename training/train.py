@@ -117,19 +117,21 @@ class Training:
         logging.info(f"Accuracy score: {accuracy}")
         return accuracy
 
-    def save(self, path: str) -> None:
+    def save(self, path: str = None) -> None:
         """Saves the trained model to the specified path in native Keras format."""
         logging.info("Saving the model...")
         if not os.path.exists(MODEL_DIR):
             os.makedirs(MODEL_DIR)
-
+    
+        # Use the specified path or default to 'tensorflow_model.keras'
         if not path:
-            path = os.path.join(MODEL_DIR, datetime.now().strftime(conf['general']['datetime_format']) + '.keras')  # Use .keras extension
+            path = os.path.join(MODEL_DIR, 'tensorflow_model.keras')
         else:
-            path = os.path.join(MODEL_DIR, path)
-
+            path = os.path.join(MODEL_DIR, 'tensorflow_model.keras')
+    
         tf.keras.models.save_model(self.model, path, save_format='tf')  # Use save_format='tf' for native Keras format
         logging.info(f"Model saved to {path}")
+
 
 
 def main():

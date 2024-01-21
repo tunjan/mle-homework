@@ -15,15 +15,29 @@ This repository contains an attempt of a well-organized machine learning (MLE) p
 
 ## Usage
 
-1. Set the `CONF_PATH` environment variable to "settings.json".
+### Docker
+
+1. Clone the repository
+    ```bash
+   git clone https://github.com/tunjan/mle-homework.git
+   ```
+
+2. Inside VSCode, open it and navigate to the `File` menu and click `Add Folder to Workspace`. 
+Navigate to the directory where you cloned the repository and add it.
+
+3. Set the `CONF_PATH` environment variable to "settings.json".
    ```bash
    export CONF_PATH="settings.json"
    ```
-2. Run the bash script from the parent folder (use sudo if necessary).
+4. Run the bash script from the parent folder (use sudo if necessary).
    ```bash
    bash script.sh
    ```
-3. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
+5. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
+
+### Locally
+
+Run the following scripts in order `data_process/data_generation.py`, `training/train.py`, `inference/run.py`. The results achieved should be similar. However, because of the dependence of operating system, Docker is recommended for reproducibility.
 
 ## Considerations
 

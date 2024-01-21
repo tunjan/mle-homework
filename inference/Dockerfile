@@ -1,8 +1,8 @@
 # Dockerfile for training
 # Start from a base Python image
-FROM python:3.10
+FROM python:3.11.6
 
-ARG model_name=prod_model.keras
+ARG model_name=tensorflow_model.keras
 ARG settings_name=settings.json
 ENV CONF_PATH=${settings_name}
 

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-python ./data_process/data_generation.py
+mkdir data
 
-# Build training Docker image
+mkdir models
+
 docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t training_image .
 
 # Run training Docker container
@@ -16,6 +17,7 @@ model_name="tensorflow_model.keras"  # Replace with your actual model name
 
 # Copy trained model from training container to local machine
 docker cp $container_id:/app/models/$model_name ./models
+docker cp $container_id:/app/data/ .
 
 # Build inference Docker image
 docker build -f ./inference/Dockerfile --build-arg model_name=$model_name --build-arg settings_name=settings.json -t inference_image .
@@ -27,4 +29,3 @@ container_id=$(docker ps -lq)
 
 # Copy results from inference container to local machine
 docker cp $container_id:/app/results .
-

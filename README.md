@@ -32,7 +32,7 @@ This repository contains an attempt of a well-organized machine learning (MLE) p
    ```
 6. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
 
-**NOTE**: The bash script might require adjustments for non-Linux operating systems. All necessary commands are included in the script, and the Docker image can be run using them. Thus executing them manually is enough.
+**NOTE**: The Shell script was tested both on Unix and Windows operating systems. The only dependencies are `Git`, `Python` and `Docker`. If you're using Microsoft Windows make sure to open the terminal on the folder with Git and Bash.
 
 ### Locally
 
@@ -44,7 +44,9 @@ It's worth noting that installing TensorFlow within the Docker container is a pa
 
 ## Dependencies
 
-Obviously, Docker will need to be installed, that's all.
+- Docker
+- Python (pip)
+- Bash
 
 ## Attributions
 

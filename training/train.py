@@ -15,8 +15,8 @@ from sklearn.metrics import accuracy_score
 import time
 
 # Comment this lines if you have problems with MLFlow installation
-import mlflow
-mlflow.autolog()
+#import mlflow
+#mlflow.autolog()
 
 # Adds the root directory to system path
 # Setting up root and model directories
@@ -34,13 +34,13 @@ with open(CONF_FILE, "r") as file:
 
 from utils import get_project_dir, configure_logging
 
-SEED = conf['general']['random_state']
-
-os.environ['PYTHONHASHSEED']=str(SEED)
-np.random.seed(SEED)
-tf.random.set_seed(SEED)
-tf.keras.utils.set_random_seed(SEED)  # sets seeds for base-python, numpy and tf
-tf.config.experimental.enable_op_determinism()
+def setup_environment(seed):
+    """Set up environment for reproducibility."""
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    tf.random.set_seed(seed)
+    tf.keras.utils.set_random_seed(seed)
+    tf.config.experimental.enable_op_determinism()
 
 # Define paths from configuration
 DATA_DIR = get_project_dir(conf['general']['data_dir'])
@@ -91,7 +91,7 @@ class Training:
         ])
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    def run_training(self, training_data: pd.DataFrame, out_path: str = None, test_size: float = 0.33) -> None:
+    def run_training(self, training_data: pd.DataFrame, out_path: str = None, test_size: float = 0.2) -> None:
         logging.info("Running training...")
         features, target = self.data_split(training_data)
         X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=test_size, random_state=conf['general']['random_state'])
@@ -141,6 +141,7 @@ class Training:
         logging.info(f"Model saved to {path}")
 
 def main():
+    setup_environment(conf['general']['random_state'])
     configure_logging()
 
     data_proc = DataProcessor()

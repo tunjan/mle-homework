@@ -34,6 +34,14 @@ with open(CONF_FILE, "r") as file:
 
 from utils import get_project_dir, configure_logging
 
+SEED = conf['general']['random_state']
+
+os.environ['PYTHONHASHSEED']=str(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+tf.keras.utils.set_random_seed(SEED)  # sets seeds for base-python, numpy and tf
+tf.config.experimental.enable_op_determinism()
+
 # Define paths from configuration
 DATA_DIR = get_project_dir(conf['general']['data_dir'])
 MODEL_DIR = get_project_dir(conf['general']['models_dir'])
@@ -86,7 +94,7 @@ class Training:
     def run_training(self, training_data: pd.DataFrame, out_path: str = None, test_size: float = 0.33) -> None:
         logging.info("Running training...")
         features, target = self.data_split(training_data)
-        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=test_size)
+        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=test_size, random_state=conf['general']['random_state'])
 
         start_time = time.time()
         self.train(X_train, y_train)

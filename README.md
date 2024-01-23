@@ -4,14 +4,11 @@ This repository contains an attempt of a well-organized machine learning (MLE) p
 
 ## Overview of Functionality
 
-1. **Data Generation:**
-   - Generate the data that the model will be trained and tested on, for simplicity sake, the Iris dataset will be used.
+1. **Data Generation:** Generate the data that the model will be trained and tested on. For simplicity's sake, the Iris dataset will be used.
 
-2. **Model Training:**
-   - Training  the model with the `train.py` script. The `iris_train.csv` dataset wil be used.
+2. **Model Training:** The model is trained using the `train.py` script, which uses the `iris_train.csv` dataset.
 
-3. **Inference on Unseen Data:**
-   - The trained model is then used to make predictions on the unseen data from `iris_test.csv`.
+3. **Inference on Unseen Data:** The model is used to predict outcomes using unseen data from the `iris_test.csv` file. It ouputs the results to a `.csv` file.
 
 ## Usage
 
@@ -22,24 +19,24 @@ This repository contains an attempt of a well-organized machine learning (MLE) p
    git clone https://github.com/tunjan/mle-homework.git
    ```
 
-2. Inside VSCode, open it and navigate to the `File` menu and click `Add Folder to Workspace`. 
-Navigate to the directory where you cloned the repository and add it.
-
-3. Set the `CONF_PATH` environment variable to "settings.json".
+2. (optional) Open VSCode, go to the File menu, and select Add Folder to Workspace.
+3. (optional) Navigate to the cloned repository's directory and add it.
+   
+4. Set the `CONF_PATH` environment variable to "settings.json".
    ```bash
    export CONF_PATH="settings.json"
    ```
-4. Run the bash script from the parent folder (use sudo if necessary).
+5. Run the bash script from the parent folder (use sudo if necessary).
    ```bash
    bash script.sh
    ```
-5. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
+6. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
 
-**NOTE**: The bash script may require modifications if it is to be run on other OS different than Linux. However, the necessary commands are inside the file and the Docker image can be ran with them.
+**NOTE**: The bash script might require adjustments for non-Linux operating systems. All necessary commands are included in the script, and the Docker image can be run using them. Thus executing them manually is enough.
 
 ### Locally
 
-Run the following scripts in order `data_process/data_generation.py`, `training/train.py`, `inference/run.py`. The results achieved should be similar. However, due to the dependece on the operating system, Docker is recommended to ensure reproducibility.
+For local execution, run these scripts in sequence: `data_process/data_generation.py`, `training/train.py`, `inference/run.py`. The results should be similar to the Docker approach. However, using Docker is advised for consistent reproducibility across different operating systems. The trained model should be in the `/models` directory, and predictions on new data in the `/results` folder.
 
 ## Considerations
 

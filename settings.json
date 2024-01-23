@@ -1,6 +1,6 @@
 {
     "general": {
-        "random_state": 42,
+        "random_state": 1,
         "status": "test",
         "datetime_format": "%d.%m.%Y_%H.%M",
         "data_dir": "data",

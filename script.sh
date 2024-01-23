@@ -1,31 +1,24 @@
+
 #!/bin/bash
+set -e
 
-mkdir data
+# Create directories if they don't exist
+[ ! -d "data" ] && mkdir data
+[ ! -d "models" ] && mkdir models
 
-mkdir models
-
+# Build and run training Docker container
 docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t training_image .
+container_id=$(docker run -d training_image)
 
-# Run training Docker container
-docker run -it training_image /bin/bash
-
-# Get the container ID of the last run container
-container_id=$(docker ps -lq)
-
-# Substitute <container_id> and <model_name> with actual values
-model_name="tensorflow_model.keras"  # Replace with your actual model name
-
-# Copy trained model from training container to local machine
-docker cp $container_id:/app/models/$model_name ./models
+# Wait for training to complete and then copy files
+docker wait $container_id
+docker cp $container_id:/app/models/tensorflow_model.keras ./models
 docker cp $container_id:/app/data/ .
 
-# Build inference Docker image
-docker build -f ./inference/Dockerfile --build-arg model_name=$model_name --build-arg settings_name=settings.json -t inference_image .
+# Build and run inference Docker container
+docker build -f ./inference/Dockerfile --build-arg model_name=tensorflow_model.keras --build-arg settings_name=settings.json -t inference_image .
+container_id=$(docker run -d inference_image)
 
-# Run inference Docker container with attached terminal
-docker run -it inference_image /bin/bash
-
-container_id=$(docker ps -lq)
-
-# Copy results from inference container to local machine
+# Wait for inference to complete and then copy results
+docker wait $container_id
 docker cp $container_id:/app/results .

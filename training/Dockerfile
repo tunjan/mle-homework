@@ -9,20 +9,20 @@ ENV CONF_PATH=${settings_name}
 # Changing the path to the working directory in the container
 WORKDIR /app
 
-# Copy data folder to Docker
+# Install TensorFlow first to create a reusable layer
+# Extract TensorFlow version from requirements.txt and install
+COPY requirements.txt ./
+RUN grep tensorflow== requirements.txt | xargs pip install --no-cache-dir
+
+# Install any remaining necessary packages listed in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application
 COPY data_process /app/data_process
 COPY data /app/data
-
-# Copy the code itself
 COPY training /app/training
-
-# Copy utils.py
 COPY utils.py /app
 COPY ${CONF_PATH} /app
-
-# Install any necessary packages listed in requirements.txt
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
 
 # Train the model
 RUN python3 data_process/data_generation.py

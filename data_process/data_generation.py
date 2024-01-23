@@ -1,8 +1,15 @@
 # Import necessary libraries
 import numpy as np
 import pandas as pd
+import json
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
+CONF_FILE = os.getenv('CONF_PATH', "settings.json")
+
+# Load settings from JSON file
+with open(CONF_FILE, "r") as file:
+    settings = json.load(file)
 
 # Load Iris dataset from scikit-learn
 iris = load_iris()
@@ -14,21 +21,27 @@ iris_df = pd.DataFrame(data, columns=columns)
 X = iris_df.drop("target", axis=1)
 y = iris_df["target"]
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Split the data into training and testing sets using settings
+test_size = settings['train']['test_size']
+random_state = settings['general']['random_state']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
 
-# Save the datasets locally
-data_folder = "data"
-train_file = "iris_train.csv"
-test_file = "iris_test.csv"
+# Define file paths using settings
+data_folder = settings['general']['data_dir']
+train_file = settings['train']['table_name']
+test_file = settings['inference']['inp_table_name']
+
+# Create the data directory if it doesn't exist
+if not os.path.exists(data_folder):
+    os.makedirs(data_folder)
 
 # Save training set
 train_data = pd.concat([X_train, y_train], axis=1)
-train_data.to_csv(f"{data_folder}/{train_file}", index=False)
+train_data.to_csv(os.path.join(data_folder, train_file), index=False)
 
 # Save testing set without the target feature
 test_data = X_test
-test_data.to_csv(f"{data_folder}/{test_file}", index=False)
+test_data.to_csv(os.path.join(data_folder, test_file), index=False)
 
-print(f"Training set saved to {data_folder}/{train_file}")
-print(f"Testing set saved to {data_folder}/{test_file}")
+print(f"Training set saved to {os.path.join(data_folder, train_file)}")
+print(f"Testing set saved to {os.path.join(data_folder, test_file)}")

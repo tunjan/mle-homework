@@ -1,6 +1,6 @@
 # Machine Learning Exercise
 
-This repository contains an attempt of a well-organized machine learning (MLE) project, focusing on achieving compatibility with different machine environments. By utilizing Docker containers, the project is able to run on any operating systems and CPU architectures.
+This repository contains an attempt of a well-organized machine learning (MLE) project, focusing on achieving compatibility with different machine environments.
 
 ## Overview of Functionality
 
@@ -8,9 +8,9 @@ This repository contains an attempt of a well-organized machine learning (MLE) p
    - Generate the data that the model will be trained and tested on, for simplicity sake, the Iris dataset will be used.
 
 2. **Model Training:**
-   - The next phase involves the training process for the model with the `train.py` script, the `iris_train.csv` file wil be used.
+   - Training  the model with the `train.py` script. The `iris_train.csv` dataset wil be used.
 
-3. **Inference on New Data:**
+3. **Inference on Unseen Data:**
    - The trained model is then used to make predictions on the unseen data from `iris_test.csv`.
 
 ## Usage
@@ -35,18 +35,20 @@ Navigate to the directory where you cloned the repository and add it.
    ```
 5. The generated model should be in the `/models` folder and the infered results on unseen data in the `/results` folder.
 
+**NOTE**: The bash script may require modifications if it is to be run on other OS different than Linux. However, the necessary commands are inside the file and the Docker image can be ran with them.
+
 ### Locally
 
-Run the following scripts in order `data_process/data_generation.py`, `training/train.py`, `inference/run.py`. The results achieved should be similar. However, because of the dependence of operating system, Docker is recommended for reproducibility.
+Run the following scripts in order `data_process/data_generation.py`, `training/train.py`, `inference/run.py`. The results achieved should be similar. However, due to the dependece on the operating system, Docker is recommended to ensure reproducibility.
 
 ## Considerations
 
-It's worth noting that installing TensorFlow within the Docker container is a painful requirement, as it is a substantially big package (450 MB). Patience or a high download bandwidth may be required.
+It's worth noting that installing TensorFlow within the Docker container is a painful requirement, as it is a substantially big package (475 MB). Patience or a high download bandwidth may be required.
 
 ## Dependencies
 
 Obviously, Docker will need to be installed, that's all.
 
-## Atributions
+## Attributions
 
-Special thanks to the original developer of the code. Any remaining mistakes, as is often inevitable, are my sole responsibility.
+Thanks to the original developer of the code. Any remaining mistakes, as is often inevitable, are my sole responsibility.
